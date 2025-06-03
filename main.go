@@ -26,7 +26,7 @@ type columnExtractor struct {
 
 func (e *columnExtractor) parseUntilClosingBackTick() ([]rune, error) {
 	if len(e.query) == e.byteIndex {
-		return e.currToken, nil
+		return nil, fmt.Errorf("unclosed backtick quote")
 	}
 	runeValue, width := utf8.DecodeRuneInString(e.query[e.byteIndex:])
 	e.byteIndex += width
@@ -39,7 +39,7 @@ func (e *columnExtractor) parseUntilClosingBackTick() ([]rune, error) {
 
 func (e *columnExtractor) parseUntilClosingSingleQuote() ([]rune, error) {
 	if len(e.query) == e.byteIndex {
-		return e.currToken, nil
+		return nil, fmt.Errorf("unclosed single quote")
 	}
 	runeValue, width := utf8.DecodeRuneInString(e.query[e.byteIndex:])
 	e.byteIndex += width
@@ -124,7 +124,7 @@ func (e *columnExtractor) columns() []string {
 		} else if token == ")" {
 			closingParenthesisObserved = true
 			break
-		} else if openingParenthesisObserved && !closingParenthesisObserved {
+		} else if openingParenthesisObserved && !closingParenthesisObserved && token != "," {
 			columns = append(columns, token)
 		}
 	}
