@@ -1,14 +1,10 @@
 package main
 
 import (
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
-// copied from clickhouse-go source code
-var extractInsertColumnsMatch = regexp.MustCompile(`(?si)INSERT INTO .+\s\((?P<Columns>.+)\)$`)
 
 func TestExtractInsertColumns(t *testing.T) {
 	t.Run(`simple`, func(t *testing.T) {

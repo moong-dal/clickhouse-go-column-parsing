@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
@@ -133,6 +134,7 @@ func (e *columnExtractor) columns() []string {
 func main() {
 	queries := []string{
 		"INSERT INTO `DATA (BASE`.`A (TABLE)` ( `column \\`one`, columnTwo, 'col)umn\\' (three ')",
+		"INSERT INTO db.table (`ITEM`, `QTY (MT)`)",
 	}
 
 	for _, query := range queries {
@@ -144,6 +146,13 @@ func main() {
 			panic(err)
 		}
 		columns := extractor.columns()
-		fmt.Println(query, columns)
+		fmt.Println("parser based", query, columns)
+
+		matches := extractInsertColumnsMatch.FindStringSubmatch(query)
+
+		fmt.Println("regexp based", query, matches[1])
 	}
 }
+
+// copied from clickhouse-go source code
+var extractInsertColumnsMatch = regexp.MustCompile(`(?si)INSERT INTO .+\s\((?P<Columns>.+)\)$`)
