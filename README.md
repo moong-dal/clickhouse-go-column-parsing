@@ -9,3 +9,8 @@
 - BenchmarkRegexp-8         801073              1552 ns/op
 - It handles case where table name and the opening parenthesis are not separated by a space https://github.com/ClickHouse/clickhouse-go/issues/1485#issuecomment-2632413186
 - It handles case where a space preceeds a opening parenthesis in a quoted column name
+
+
+## Example
+- Input: ```INSERT INTO `DATA (BASE`.`A (TABLE)` ( `column \`one`, columnTwo, 'col)umn\' (three ') ```
+- Output: ```[`column \`one` , columnTwo , 'col)umn\' (three ']```

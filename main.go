@@ -129,3 +129,21 @@ func (e *columnExtractor) columns() []string {
 	}
 	return columns
 }
+
+func main() {
+	queries := []string{
+		"INSERT INTO `DATA (BASE`.`A (TABLE)` ( `column \\`one`, columnTwo, 'col)umn\\' (three ')",
+	}
+
+	for _, query := range queries {
+		extractor := &columnExtractor{
+			query: query,
+		}
+		err := extractor.parse()
+		if err != nil {
+			panic(err)
+		}
+		columns := extractor.columns()
+		fmt.Println(query, columns)
+	}
+}
