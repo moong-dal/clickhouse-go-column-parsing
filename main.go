@@ -10,7 +10,7 @@ import (
 // Purpose is to reliably extract columns names
 // Does so by parsing the query rune by rune to tokenise it into identifiers and some special characters
 // Single and backtick quoted identifiers are handled
-// 25% slower than the regexp solution
+// 30% slower than the regexp solution
 // Benchmark results:
 // BenchmarkParse-8          525538              2023 ns/op
 // BenchmarkRegexp-8         801073              1552 ns/op
